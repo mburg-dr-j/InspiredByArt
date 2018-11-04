@@ -1,4 +1,7 @@
 var mySVG = document.getElementById("mySVG");
+HEIGHT = mySVG.height.baseVal.value;
+WIDTH = mySVG.width.baseVal.value;
+var hexagons = [];
 
 function Hexagon (center, sideLength, color) {
   this.center = center;
@@ -67,11 +70,21 @@ function Hexagon (center, sideLength, color) {
     return colorHTMLStr;
   }
   this.fillHTML = function () {
-    fillHTMLStr = "rbg(";
+    fillHTMLStr = "rgb(";
     fillHTMLStr += this.fillR() + ", ";
     fillHTMLStr += this.fillG() + ", ";
     fillHTMLStr += this.fillB() + ")";
     return fillHTMLStr;
+  }
+  this.svgHTML = function () {
+    svgStr = '<polygon points=\"';
+    svgStr += this.pointStr();
+    svgStr += '\" style=\"fill:';
+    svgStr += this.fillHTML();
+    svgStr += '; stroke:';
+    svgStr += this.colorHTML();
+    svgStr += '; stroke-width:3\" />';
+    return svgStr;
   }
 }
 
@@ -91,7 +104,19 @@ function overlapped (hexagon1, hexagon2) {
   }
 }
 
+function startHexagon () {
+  centerX = Math.floor(Math.random() * (WIDTH-200)) + 100;
+  centerY = Math.floor(Math.random() * (HEIGHT-200)) + 100;
+  center = [centerX, centerY];
+  sideLength = Math.floor(Math.random() * 200 + 100);
+  colorRed = Math.floor(Math.random() * 128 + 128);
+  colorGreen = Math.floor(Math.random() * 128 + 128);
+  colorBlue = Math.floor(Math.random() * 128 + 128);
+  color = [colorRed, colorGreen, colorBlue];
+  startHex = new Hexagon (center, sideLength, color);
+  return startHex;
+}
 
-var myHexagon1 = new Hexagon([200, 200], 100, [128, 128, 128]);
-var myHexagon2 = new Hexagon([300, 300], 100, [0, 0, 0]);
-console.log(myHexagon1);
+var hexagon1 = startHexagon();
+console.log(hexagon1.svgHTML());
+mySVG.innerHTML += hexagon1.svgHTML();
