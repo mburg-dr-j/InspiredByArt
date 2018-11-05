@@ -165,15 +165,20 @@ function getHexagon (sourceHexagon, newSideLength) {
   // Start by generating an angle and a radius, then start at center
   // of source hexagon, go out from there at this angle for a distance
   // of this radius, and put new center there.
-  angle = Math.random() * Math.PI;
+  angle = Math.random() * Math.PI * 2;
   radius = sourceHexagon.sideLength + newSideLength;
   newCenterX = Math.floor(Math.cos(angle) * radius) + sourceHexagon.centerX();
   newCenterY = Math.floor(Math.sin(angle) * radius) + sourceHexagon.centerY();
   newCenter = [newCenterX, newCenterY];
-  console.log(sourceHexagon.center);
-  console.log(Math.floor(angle * 180 / Math.PI));
-  console.log(radius);
-  console.log(newCenter);
+  // Generate new color, adding 0-29 to each band of existing color
+  // to make it lighter.
+  currentColor = sourceHexagon.color;
+  newR = Math.floor(Math.random() * 30) + currentColor[0];
+  newG = Math.floor(Math.random() * 30) + currentColor[1];
+  newB = Math.floor(Math.random() * 30) + currentColor[2];
+  newColor = [newR, newG, newB];
+  newHexagon = new Hexagon (newCenter, newSideLength, newColor);
+  return newHexagon;
 }
 
 function addHexagons () {
@@ -191,7 +196,8 @@ function addHexagons () {
   newSideLength = Math.round(prevSideLength - 1 - Math.random() * 30);
   // End the design once we get below sideLength 10.
   if (newSideLength > 10) {
-    getHexagon(lastHexagon, newSideLength);
+    console.log(lastHexagon);
+    console.log(getHexagon(lastHexagon, newSideLength));
     clearInterval(startRun);
   }
 }
