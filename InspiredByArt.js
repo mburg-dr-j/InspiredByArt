@@ -196,9 +196,16 @@ function addHexagons () {
   newSideLength = Math.round(prevSideLength - 1 - Math.random() * 30);
   // End the design once we get below sideLength 10.
   if (newSideLength > 10) {
-    console.log(lastHexagon);
-    console.log(getHexagon(lastHexagon, newSideLength));
+    newHexagon = getHexagon(lastHexagon, newSideLength);
+    hexagonsToAdd.push(newHexagon);
+  } else {
     clearInterval(startRun);
+  }
+  hexagonsToAdd.forEach(drawHexagons);
+  hexagons = hexagons.concat(hexagonsToAdd);
+
+  function drawHexagons (newHexagon) {
+    mySVG.innerHTML += newHexagon.svgHTML() + "\n";
   }
 }
 
