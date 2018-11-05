@@ -143,8 +143,8 @@ function startHexagon () {
   centerX = Math.floor(Math.random() * (WIDTH-200)) + 100;
   centerY = Math.floor(Math.random() * (HEIGHT-200)) + 100;
   center = [centerX, centerY];
-  // Generate the sideLength, 100-399
-  sideLength = Math.floor(Math.random() * 200 + 100);
+  // Generate the sideLength, 100-299
+  sideLength = Math.floor(Math.random() * 100 + 100);
   // Generate the color, first hexagon has saturated color
   // r,g,b are all between 128-255.
   colorRed = Math.floor(Math.random() * 128 + 128);
@@ -156,13 +156,24 @@ function startHexagon () {
   return startHex;
 }
 
-function getHexagon (sourceHexagon) {
+function getHexagon (sourceHexagon, newSideLength) {
   /*
     This function randomly generates one hexagon, that is close to the
     source hexagon, in location, size and color.  Does not overlap with
     source hexagon, but might overlap with something else, need to check.
   */
-
+  // Start by generating an angle and a radius, then start at center
+  // of source hexagon, go out from there at this angle for a distance
+  // of this radius, and put new center there.
+  angle = Math.random() * Math.PI;
+  radius = sourceHexagon.sideLength + newSideLength;
+  newCenterX = Math.floor(Math.cos(angle) * radius) + sourceHexagon.centerX();
+  newCenterY = Math.floor(Math.sin(angle) * radius) + sourceHexagon.centerY();
+  newCenter = [newCenterX, newCenterY];
+  console.log(sourceHexagon.center);
+  console.log(Math.floor(angle * 180 / Math.PI));
+  console.log(radius);
+  console.log(newCenter);
 }
 
 function addHexagons () {
@@ -180,12 +191,12 @@ function addHexagons () {
   newSideLength = Math.round(prevSideLength - 1 - Math.random() * 30);
   // End the design once we get below sideLength 10.
   if (newSideLength > 10) {
-    console.log(hexagons[0]);
-    console.log(newSideLength);
+    getHexagon(lastHexagon, newSideLength);
+    clearInterval(startRun);
   }
 }
 
 var hexagon1 = startHexagon();
 hexagons.push(hexagon1);
 mySVG.innerHTML += hexagon1.svgHTML();
-setInterval(addHexagons, 1000);
+startRun = setInterval(addHexagons, 1000);
