@@ -172,6 +172,17 @@ function addHexagons () {
     a particular hexagon once it generates three in a row that collide
     with one that already exists.
   */
+  // Create empty list that we will merge with main list later
+  hexagonsToAdd = [];
+  // Get the side length we had most recently, subtract 1-30 from it
+  lastHexagon = hexagons[hexagons.length - 1];
+  prevSideLength = lastHexagon.sideLength;
+  newSideLength = Math.round(prevSideLength - 1 - Math.random() * 30);
+  // End the design once we get below sideLength 10.
+  if (newSideLength > 10) {
+    console.log(hexagons[0]);
+    console.log(newSideLength);
+  }
 }
 
 var hexagon1 = startHexagon();
