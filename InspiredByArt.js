@@ -146,13 +146,14 @@ function startHexagon () {
   // Generate the sideLength, 100-299
   sideLength = Math.floor(Math.random() * 100 + 100);
   // Generate the color, first hexagon has saturated color
-  // r,g,b are all between 128-255.
-  colorRed = Math.floor(Math.random() * 128 + 128);
-  colorGreen = Math.floor(Math.random() * 128 + 128);
-  colorBlue = Math.floor(Math.random() * 128 + 128);
+  // r,g,b are all between 0-127.
+  colorRed = Math.floor(Math.random() * 128);
+  colorGreen = Math.floor(Math.random() * 128);
+  colorBlue = Math.floor(Math.random() * 128);
   color = [colorRed, colorGreen, colorBlue];
   // Create the object and return.
   startHex = new Hexagon (center, sideLength, color);
+  console.log(startHex);
   return startHex;
 }
 
@@ -197,6 +198,7 @@ function addHexagons () {
   // End the design once we get below sideLength 10.
   if (newSideLength > 10) {
     newHexagon = getHexagon(lastHexagon, newSideLength);
+    console.log(newHexagon);
     hexagonsToAdd.push(newHexagon);
   } else {
     clearInterval(startRun);
