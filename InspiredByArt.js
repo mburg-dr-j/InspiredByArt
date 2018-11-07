@@ -153,7 +153,6 @@ function startHexagon () {
   color = [colorRed, colorGreen, colorBlue];
   // Create the object and return.
   startHex = new Hexagon (center, sideLength, color);
-  console.log(startHex);
   return startHex;
 }
 
@@ -166,11 +165,16 @@ function getHexagon (sourceHexagon, newSideLength) {
   // Start by generating an angle and a radius, then start at center
   // of source hexagon, go out from there at this angle for a distance
   // of this radius, and put new center there.
-  angle = Math.random() * Math.PI * 2;
-  radius = sourceHexagon.sideLength + newSideLength;
-  newCenterX = Math.floor(Math.cos(angle) * radius) + sourceHexagon.centerX();
-  newCenterY = Math.floor(Math.sin(angle) * radius) + sourceHexagon.centerY();
-  newCenter = [newCenterX, newCenterY];
+  newCenterX = 0;
+  newCenterY = 0;
+  // Use the while loop to make sure that the hexagon is on the screen.
+  while (!((newCenterX - newSideLength > 0) && (newCenterX + newSideLength < WIDTH) && (newCenterY - newSideLength > 0) && (newCenterY + newSideLength < HEIGHT))) {
+    angle = Math.random() * Math.PI * 2;
+    radius = sourceHexagon.sideLength + newSideLength;
+    newCenterX = Math.floor(Math.cos(angle) * radius) + sourceHexagon.centerX();
+    newCenterY = Math.floor(Math.sin(angle) * radius) + sourceHexagon.centerY();
+    newCenter = [newCenterX, newCenterY];
+  }
   // Generate new color, adding 0-29 to each band of existing color
   // to make it lighter.
   currentColor = sourceHexagon.color;
@@ -198,7 +202,6 @@ function addHexagons () {
   // End the design once we get below sideLength 10.
   if (newSideLength > 10) {
     newHexagon = getHexagon(lastHexagon, newSideLength);
-    console.log(newHexagon);
     hexagonsToAdd.push(newHexagon);
   } else {
     clearInterval(startRun);
