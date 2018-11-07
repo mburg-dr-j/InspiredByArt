@@ -178,12 +178,15 @@ function getHexagon (sourceHexagon, newSideLength) {
     newCenterY = Math.floor(Math.sin(angle) * radius) + sourceHexagon.centerY();
     newCenter = [newCenterX, newCenterY];
   }
-  // Generate new color, adding 0-29 to each band of existing color
+  // Generate new color, adding 10-39 to each band of existing color
   // to make it lighter.
   currentColor = sourceHexagon.color;
-  newR = Math.floor(Math.random() * 30) + currentColor[0];
-  newG = Math.floor(Math.random() * 30) + currentColor[1];
-  newB = Math.floor(Math.random() * 30) + currentColor[2];
+  newR = Math.floor(Math.random() * 30) + currentColor[0] + 10;
+  newG = Math.floor(Math.random() * 30) + currentColor[1] + 10;
+  newB = Math.floor(Math.random() * 30) + currentColor[2] + 10;
+  if (newR > 250) {newR = 250;}
+  if (newG > 250) {newG = 250;}
+  if (newB > 250) {newB = 250;}
   newColor = [newR, newG, newB];
   newHexagon = new Hexagon (newCenter, newSideLength, newColor);
   return newHexagon;
@@ -202,10 +205,10 @@ function addHexagons () {
   prevHexagons = [];
   prevHexagons = prevHexagons.concat(hexagonsToAdd);
   hexagonsToAdd = [];
-  // Get the side length we had most recently, subtract 1-30 from it
+  // Get the side length we had most recently, subtract 6-30 from it
   lastHexagon = hexagons[hexagons.length - 1];
   prevSideLength = lastHexagon.sideLength;
-  newSideLength = Math.round(prevSideLength - 1 - Math.random() * 30);
+  newSideLength = Math.round(prevSideLength - 6 - Math.random() * 25);
   // End the design once we get below sideLength 10.
   if (newSideLength > 10) {
     prevHexagons.forEach(addAPair);
