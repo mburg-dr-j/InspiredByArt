@@ -4,7 +4,7 @@ WIDTH = mySVG.width.baseVal.value;
 // This will be a list of objects of type Hexagon
 var hexagons = [];
 // Create empty list that we will use for adding to the main list
-hexagonsToAdd = [];
+var hexagonsToAdd = [];
 
 
 function Hexagon (center, sideLength, color) {
@@ -178,12 +178,12 @@ function getHexagon (sourceHexagon, newSideLength) {
     newCenterY = Math.floor(Math.sin(angle) * radius) + sourceHexagon.centerY();
     newCenter = [newCenterX, newCenterY];
   }
-  // Generate new color, adding 10-39 to each band of existing color
+  // Generate new color, adding 0-29 to each band of existing color
   // to make it lighter.
   currentColor = sourceHexagon.color;
-  newR = Math.floor(Math.random() * 30) + currentColor[0] + 10;
-  newG = Math.floor(Math.random() * 30) + currentColor[1] + 10;
-  newB = Math.floor(Math.random() * 30) + currentColor[2] + 10;
+  newR = Math.floor(Math.random() * 30) + currentColor[0];
+  newG = Math.floor(Math.random() * 30) + currentColor[1];
+  newB = Math.floor(Math.random() * 30) + currentColor[2];
   if (newR > 250) {newR = 250;}
   if (newG > 250) {newG = 250;}
   if (newB > 250) {newB = 250;}
@@ -205,15 +205,30 @@ function addHexagons () {
   prevHexagons = [];
   prevHexagons = prevHexagons.concat(hexagonsToAdd);
   hexagonsToAdd = [];
-  // Get the side length we had most recently, subtract 6-30 from it
+  // Get the side length we had most recently, subtract 11-30 from it
   lastHexagon = hexagons[hexagons.length - 1];
   prevSideLength = lastHexagon.sideLength;
-  newSideLength = Math.round(prevSideLength - 6 - Math.random() * 25);
+  newSideLength = Math.round(prevSideLength - 11 - Math.random() * 20);
   // End the design once we get below sideLength 10.
   if (newSideLength > 10) {
     prevHexagons.forEach(addAPair);
   } else {
+    console.log("Done.")
     clearInterval(startRun);
+    // This is probably not the most efficient way to restart but here it is.
+    setTimeout(restart, 5000);
+
+    function restart() {
+      console.log("Restarting.");
+      mySVG.innerHTML = "";
+      hexagons = [];
+      hexagonsToAdd = [];
+      hexagon1 = startHexagon();
+      hexagons.push(hexagon1);
+      hexagonsToAdd.push(hexagon1);
+      mySVG.innerHTML += hexagon1.svgHTML();
+      startRun = setInterval(addHexagons, 1000);
+    }
   }
   hexagonsToAdd.forEach(drawHexagons);
   hexagons = hexagons.concat(hexagonsToAdd);
