@@ -3,6 +3,9 @@ HEIGHT = mySVG.height.baseVal.value;
 WIDTH = mySVG.width.baseVal.value;
 // This will be a list of objects of type Hexagon
 var hexagons = [];
+// Create empty list that we will use for adding to the main list
+hexagonsToAdd = [];
+
 
 function Hexagon (center, sideLength, color) {
   /*
@@ -193,7 +196,11 @@ function addHexagons () {
     a particular hexagon once it generates three in a row that collide
     with one that already exists.
   */
-  // Create empty list that we will merge with main list later
+  // Move last round's hexagons to another list to make room for the
+  // new ones.  We keep track of the old ones so we can add two new
+  // hexagons for each old one.
+  prevHexagons = [];
+  prevHexagons = prevHexagons.concat(hexagonsToAdd);
   hexagonsToAdd = [];
   // Get the side length we had most recently, subtract 1-30 from it
   lastHexagon = hexagons[hexagons.length - 1];
@@ -201,13 +208,19 @@ function addHexagons () {
   newSideLength = Math.round(prevSideLength - 1 - Math.random() * 30);
   // End the design once we get below sideLength 10.
   if (newSideLength > 10) {
-    newHexagon = getHexagon(lastHexagon, newSideLength);
-    hexagonsToAdd.push(newHexagon);
+    prevHexagons.forEach(addAPair);
   } else {
     clearInterval(startRun);
   }
   hexagonsToAdd.forEach(drawHexagons);
   hexagons = hexagons.concat(hexagonsToAdd);
+
+  function addAPair (lastHexagon) {
+    for (i=0; i<2; i++) {
+      newHexagon = getHexagon(lastHexagon, newSideLength);
+      hexagonsToAdd.push(newHexagon);
+    }
+  }
 
   function drawHexagons (newHexagon) {
     mySVG.innerHTML += newHexagon.svgHTML() + "\n";
@@ -215,6 +228,9 @@ function addHexagons () {
 }
 
 var hexagon1 = startHexagon();
+// Add it to the main list.
 hexagons.push(hexagon1);
+// We also have to add it to hexagonsToAdd in order to get the ball rolling.
+hexagonsToAdd.push(hexagon1);
 mySVG.innerHTML += hexagon1.svgHTML();
 startRun = setInterval(addHexagons, 1000);
