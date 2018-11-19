@@ -193,12 +193,9 @@ function getHexagon (sourceHexagon, newSideLength) {
 }
 
 function addHexagons () {
-  /*
-    This function generates one round of hexagons, trying to generate
-    hexagons around each of the existing hexagons.  Stops trying at
-    a particular hexagon once it generates three in a row that collide
-    with one that already exists.
-  */
+  // This function generates one round of hexagons, two new hexagons
+  // for each existing hexagon.  
+  
   // Move last round's hexagons to another list to make room for the
   // new ones.  We keep track of the old ones so we can add two new
   // hexagons for each old one.
